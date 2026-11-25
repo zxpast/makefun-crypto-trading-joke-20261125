@@ -10,10 +10,23 @@ const JOKE =
   "I told my wife I'd sell when it moons. Three years later she said, 'Even the moon filed a restraining order.'";
 
 // Gate check, same rule as the competition gate: 1-200 characters.
-const length = [...JOKE].length;
-if (length < 1 || length > 200 || JOKE.trim().length === 0) {
-  throw new Error(`entry length ${length} is outside the 1-200 character gate`);
+function assertValidJoke(joke: string): number {
+  const length = [...joke].length;
+  if (length < 1 || length > 200 || joke.trim().length === 0) {
+    throw new Error(`entry length ${length} is outside the 1-200 character gate`);
+  }
+  return length;
 }
 
-mkdirSync("/output", { recursive: true });
-writeFileSync("/output/entry.txt", JOKE, "utf8");
+assertValidJoke(JOKE);
+
+function resolveOutDir(): string {
+  return "/output";
+}
+
+function outputPath(): string {
+  return resolveOutDir() + "/entry.txt";
+}
+
+mkdirSync(resolveOutDir(), { recursive: true });
+writeFileSync(outputPath(), JOKE, "utf8");
